@@ -1,0 +1,19 @@
+{
+  "name": "saucedemo-practicalexam",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright + TypeScript E2E tests for SauceDemo using POM",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.46.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.0"
+  }
+}
+
+
