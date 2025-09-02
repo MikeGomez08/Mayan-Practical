@@ -12,26 +12,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    
+
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          SauceDemo/node_modules
+          ~/.npm
+        key: ${{ runner.os }}-build-${{ hashFiles('SauceDemo/package-lock.json') }}
+
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'npm'
-        cache-dependency-path: 'SauceDemo/package-lock.json'
-    
+
     - name: Install dependencies
       working-directory: ./SauceDemo
       run: npm ci
-    
+
     - name: Install Playwright Browsers
       working-directory: ./SauceDemo
       run: npx playwright install --with-deps
-    
+
     - name: Run Playwright tests
       working-directory: ./SauceDemo
       run: npx playwright test --reporter=dot
-    
+
     - name: Upload Playwright report
       if: always()
       uses: actions/upload-artifact@v4
@@ -39,7 +45,7 @@ jobs:
         name: playwright-report-${{ github.run_number }}
         path: SauceDemo/playwright-report/
         retention-days: 30
-    
+
     - name: Upload test results
       if: always()
       uses: actions/upload-artifact@v4
