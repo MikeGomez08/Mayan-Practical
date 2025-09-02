@@ -1,76 +1,105 @@
-## SauceDemo Playwright (POM) Test Suite
+## SauceDemo E2E Tests (Playwright + POM)
 
-This repository contains end-to-end tests for `https://www.saucedemo.com/` using Playwright with the Page Object Model (POM) pattern.
+End‑to‑end regression tests for `https://www.saucedemo.com/` implemented with Playwright Test and the Page Object Model (POM).
 
-### Scenario Covered
-- Login with valid credentials
-- Add a product to the cart
-- Proceed to checkout and complete purchase
+### Objectives
+- Validate that a user can log in, add a product to the cart, and complete checkout.
+- Provide reliable negative coverage for invalid login.
 
 ### Tech Stack
-- Playwright Test
+- Playwright Test (multi‑browser)
 - TypeScript
-- POM architecture
+- Page Object Model (POM)
+
+### Test Environment
+- URL: `https://www.saucedemo.com/`
+- Credentials:
+  - Username: `standard_user`
+  - Password: `secret_sauce`
+
+### Acceptance Criteria
+- The user can add products to the cart.
+- The user can proceed to checkout and complete the purchase.
+
+---
+
+## Getting Started
 
 ### Prerequisites
-- Node.js 18+ installed
+- Node.js 18+
 
-### Install Dependencies
+### Install dependencies and browsers
+From the `SauceDemo` directory:
 ```bash
 npm install
-```
-
-### Install Playwright Browsers
-```bash
 npx playwright install
 ```
 
-### Run Tests (headless)
+### Run all tests
 ```bash
-npm run test
+npx playwright test -c SauceDemo/playwright.config.ts
 ```
 
-### Run Tests (headed)
+### Run headed (watch the browser)
 ```bash
-npm run test:headed
+npx playwright test -c SauceDemo/playwright.config.ts --headed
 ```
 
-### Open Playwright Test UI
+### Open the Test UI
 ```bash
-npm run test:ui
+npx playwright test -c SauceDemo/playwright.config.ts --ui
 ```
 
-### Open HTML Report
+### Open the HTML report
 ```bash
-npm run report
+npx playwright show-report SauceDemo/playwright-report
 ```
 
-### Default Test Data
-- Username: `standard_user`
-- Password: `secret_sauce`
+### Run an individual spec
+```bash
+npx playwright test SauceDemo/src/tests/LoginTest.spec.ts -c SauceDemo/playwright.config.ts
+npx playwright test SauceDemo/src/tests/addToCartCheckout.spec.ts -c SauceDemo/playwright.config.ts
+```
 
-### POM Structure (intended)
+### Debug a test
+Windows PowerShell:
+```powershell
+$env:PWDEBUG=1; npx playwright test -c SauceDemo/playwright.config.ts
 ```
-src/
-  pages/
-    base.page.ts
-    login.page.ts
-    inventory.page.ts
-    cart.page.ts
-    checkout.page.ts
-  tests/
-    add-to-cart-checkout.spec.ts
-  data/
-    users.ts
-    checkout.ts
-  utils/
-    test-ids.ts
-playwright.config.ts
-tsconfig.json
+
+---
+
+## Project Structure
 ```
+SauceDemo/
+  src/
+    pages/
+      base.page.ts
+      login.page.ts
+      inventory.page.ts
+      cart.page.ts
+      checkout.page.ts
+    tests/
+      LoginTest.spec.ts
+      addToCartCheckout.spec.ts
+    data/
+      users.ts
+      checkout.ts
+    utils/
+      test-ids.ts
+  playwright.config.ts
+  tsconfig.json
+```
+
+### Scenarios Covered
+- Positive
+  - Login with valid credentials
+  - Add a product to the cart and verify it is present
+  - Complete checkout and verify order confirmation
+- Negative
+  - Invalid login displays an appropriate error message
 
 ### Notes
-- Base URL is configured in `playwright.config.ts` as `https://www.saucedemo.com`.
-- The acceptance criteria are validated by the end-to-end test `add-to-cart-checkout.spec.ts`.
-
+- `BasePage.goto('/')` uses the configured `baseURL` from `playwright.config.ts`.
+- Default browser projects: Chromium, Firefox, WebKit. You can target one using `--project=Chromium`.
 

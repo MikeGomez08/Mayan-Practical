@@ -7,17 +7,18 @@ export abstract class BasePage {
     this.page = page;
   }
 
+  // Navigate to a specific path (defaults to root '/')
   async goto(path: string = '/') {
     await this.page.goto(path);
   }
 
+  // Returns a Locator for the given selector
   locator(selector: string): Locator {
     return this.page.locator(selector);
   }
 
+  // Asserts that the current URL contains the specified fragment
   async expectUrlContains(fragment: string) {
     await expect(this.page).toHaveURL(new RegExp(fragment));
   }
 }
-
-

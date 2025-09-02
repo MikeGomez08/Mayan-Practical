@@ -3,6 +3,7 @@ import { BasePage } from './base.page';
 import { dataTestId } from '../utils/test-ids';
 
 export class CartPage extends BasePage {
+  // Locator for the checkout button
   private checkoutButton = this.locator(dataTestId('checkout'));
 
   constructor(page: Page) {
@@ -18,5 +19,3 @@ export class CartPage extends BasePage {
     await this.checkoutButton.click();
   }
 }
-
-
