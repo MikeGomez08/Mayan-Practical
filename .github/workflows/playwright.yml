@@ -17,9 +17,9 @@ jobs:
       uses: actions/cache@v4
       with:
         path: |
-          SauceDemo/node_modules
+          node_modules
           ~/.npm
-        key: ${{ runner.os }}-build-${{ hashFiles('SauceDemo/package-lock.json') }}
+        key: ${{ runner.os }}-build-${{ hashFiles('package-lock.json') }}
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -27,15 +27,12 @@ jobs:
         node-version: '18'
 
     - name: Install dependencies
-      working-directory: ./SauceDemo
       run: npm ci
 
     - name: Install Playwright Browsers
-      working-directory: ./SauceDemo
       run: npx playwright install --with-deps
 
     - name: Run Playwright tests
-      working-directory: ./SauceDemo
       run: npx playwright test --reporter=dot
 
     - name: Upload Playwright report
@@ -43,7 +40,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: playwright-report-${{ github.run_number }}
-        path: SauceDemo/playwright-report/
+        path: playwright-report/
         retention-days: 30
 
     - name: Upload test results
@@ -51,5 +48,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: test-results-${{ github.run_number }}
-        path: SauceDemo/test-results/
+        path: test-results/
         retention-days: 30
