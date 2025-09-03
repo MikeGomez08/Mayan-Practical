@@ -61,6 +61,23 @@ npx playwright test SauceDemo/src/tests/LoginTest.spec.ts -c SauceDemo/playwrigh
 npx playwright test SauceDemo/src/tests/addToCartCheckout.spec.ts -c SauceDemo/playwright.config.ts
 ```
 
+### Run API tests only
+```bash
+npx playwright test SauceDemo/src/api/tests/ -c SauceDemo/playwright.config.ts
+```
+
+### Run specific API test categories
+```bash
+# Users API tests only
+npx playwright test -g "Users API" -c SauceDemo/playwright.config.ts
+
+# Posts API tests only  
+npx playwright test -g "Posts API" -c SauceDemo/playwright.config.ts
+
+# API flow tests only
+npx playwright test -g "API Flow Tests" -c SauceDemo/playwright.config.ts
+```
+
 ### Debug a test
 Windows PowerShell:
 ```powershell
@@ -73,31 +90,49 @@ $env:PWDEBUG=1; npx playwright test -c SauceDemo/playwright.config.ts
 ```
 SauceDemo/
   src/
-    pages/
+    pages/                    # UI Page Object Models
       base.page.ts
       login.page.ts
       inventory.page.ts
       cart.page.ts
       checkout.page.ts
-    tests/
+    tests/                    # UI Test Specifications
       LoginTest.spec.ts
       addToCartCheckout.spec.ts
-    data/
+    api/                      # API Testing Structure
+      base/
+        api-base.ts          # Base API class (REST Assured-style)
+      services/
+        jsonplaceholder-api.ts # API service methods
+      models/
+        jsonplaceholder-models.ts # TypeScript interfaces
+      test-data/
+        jsonplaceholder-data.ts   # Test data constants
+      tests/
+        jsonplaceholder-api.spec.ts # API test specifications
+    data/                    # UI Test Data
       users.ts
       checkout.ts
-    utils/
+    utils/                    # Shared Utilities
       test-ids.ts
   playwright.config.ts
   tsconfig.json
 ```
 
 ### Scenarios Covered
-- Positive
-  - Login with valid credentials
-  - Add a product to the cart and verify it is present
-  - Complete checkout and verify order confirmation
-- Negative
-  - Invalid login displays an appropriate error message
+- **UI Tests (Playwright)**
+  - Positive
+    - Login with valid credentials
+    - Add a product to the cart and verify it is present
+    - Complete checkout and verify order confirmation
+  - Negative
+    - Invalid login displays an appropriate error message
+
+- **API Tests (REST Assured-style)**
+  - CRUD operations for Users, Posts, Comments
+  - Relationship validation (user posts, post comments)
+  - Complete API flow testing
+  - Schema validation and response assertions
 
 ### Notes
 - `BasePage.goto('/')` uses the configured `baseURL` from `playwright.config.ts`.
