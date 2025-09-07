@@ -5,7 +5,7 @@ import { dataTestId } from '../utils/test-ids';
 export class LoginPage extends BasePage {
 
   // Locators
-  private usernameInput = this.locator(dataTestId('user-name'));
+  private usernameInput = this.locator(dataTestId('username'));
   private passwordInput = this.locator(dataTestId('password'));
   private loginButton = this.locator(dataTestId('login-button'));
   private errorMessage = this.locator('[data-test="error"]');

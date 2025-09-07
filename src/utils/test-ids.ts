@@ -9,6 +9,6 @@ export const hasClass = (className: string) => `:has-class("${className}")`;
 export const hasId = (id: string) => `[id="${id}"]`;
 export const hasName = (name: string) => `[name="${name}"]`;
 export const hasValue = (value: string) => `[value="${value}"]`;
-
+export const xpath = (path: string) => `xpath=${path}`;
 
 

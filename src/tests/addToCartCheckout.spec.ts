@@ -31,6 +31,7 @@ test.describe('SauceDemo - Add to Cart and Checkout (Grouped)', () => {
     });
   });
 
+
   // Add to Cart test
   test.describe('Add to Cart', () => {
     test.beforeEach(async ({ page }) => {
