@@ -17,6 +17,11 @@ export abstract class BasePage {
     return this.page.locator(selector);
   }
 
+  // Clicks an element specified by the selector
+  async click(selector: string) {
+    await this.page.click(selector);
+  }
+
   // Asserts that the current URL contains the specified fragment
   async expectUrlContains(fragment: string) {
     await expect(this.page).toHaveURL(new RegExp(fragment));

@@ -7,6 +7,7 @@ import { standardUser } from '../data/users';
 import { checkoutInfo } from '../data/checkout';
 
 test.describe('SauceDemo - Add to Cart and Checkout (Grouped)', () => {
+
   // Page objects
   let loginPage: LoginPage;
   let inventoryPage: InventoryPage;
@@ -31,7 +32,6 @@ test.describe('SauceDemo - Add to Cart and Checkout (Grouped)', () => {
     });
   });
 
-
   // Add to Cart test
   test.describe('Add to Cart', () => {
     test.beforeEach(async ({ page }) => {
@@ -47,8 +47,21 @@ test.describe('SauceDemo - Add to Cart and Checkout (Grouped)', () => {
       await inventoryPage.openCart();
       await cartPage.expectItemInCart(productName);
     });
-  });
 
+    // Add to cart multiple products and verify cart count
+    test('User adds multiple products and verifies cart count', async ({ page }) => {
+      const productsToAdd = ['Sauce Labs Backpack', 'Sauce Labs Bike Light', 'Sauce Labs Bolt T-Shirt'];
+      for (const product of productsToAdd) {
+        await inventoryPage.addProductByName(product);
+      }
+      await inventoryPage.expectCartCount(productsToAdd.length);
+      await inventoryPage.openCart();
+      for (const product of productsToAdd) {
+        await cartPage.expectItemInCart(product);
+      }
+    });
+  });
+  
   // Checkout test
   test.describe('Checkout', () => {
     test.beforeEach(async ({ page }) => {

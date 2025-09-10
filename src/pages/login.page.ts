@@ -26,10 +26,6 @@ export class LoginPage extends BasePage {
     await this.loginButton.click();
   }
 
-  async expectLoginError(messagePart: string) {
-    await expect(this.errorMessage).toBeVisible();
-    await expect(this.errorMessage).toContainText(messagePart);
-  }
 }
 
 
