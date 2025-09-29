@@ -10,6 +10,12 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        spec: [ 
+          src/tests/addToCartCheckout.spec.ts, src/tests/logout.spec.ts
+        ]
     steps:
     - uses: actions/checkout@v4
 
