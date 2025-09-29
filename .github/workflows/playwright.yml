@@ -1,76 +1,72 @@
 name: Playwright Tests
 
 on:
-push:
-branches: [ main, develop ]
-pull_request:
-branches: [ main, develop ]
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
 
 jobs:
-test:
-timeout-minutes: 60
-runs-on: ubuntu-latest
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
 
-```
-strategy:
-  matrix:
-    spec: [
-      src/tests/addToCartCheckout.spec.ts,
-      src/tests/logout.spec.ts
-    ]
+    strategy:
+      matrix:
+        spec: [ 
+          src/tests/addToCartCheckout.spec.ts, src/tests/logout.spec.ts
+        ]
+    steps:
+    - uses: actions/checkout@v4
 
-steps:
-  - uses: actions/checkout@v4
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          node_modules
+          ~/.npm
+        key: ${{ runner.os }}-build-${{ hashFiles('package-lock.json') }}
 
-  - name: Cache dependencies
-    uses: actions/cache@v4
-    with:
-      path: |
-        node_modules
-        ~/.npm
-      key: ${{ runner.os }}-build-${{ hashFiles('package-lock.json') }}
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
 
-  - name: Setup Node.js
-    uses: actions/setup-node@v4
-    with:
-      node-version: '18'
+    - name: Install dependencies
+      run: npm ci
 
-  - name: Install dependencies
-    run: npm ci
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
 
-  - name: Install Playwright Browsers
-    run: npx playwright install --with-deps
+    - name: Wait for SauceDemo to be available
+      run: |
+        for i in {1..5}; do
+          if curl -sSf https://www.saucedemo.com/ > /dev/null; then
+            echo "SauceDemo is available."
+            exit 0
+          else
+            echo "SauceDemo not available yet. Retrying in 10 seconds..."
+            sleep 10
+          fi
+        done
+        echo "SauceDemo is not available after multiple attempts."
+        exit 1
 
-  - name: Wait for SauceDemo to be available
-    run: |
-      for i in {1..5}; do
-        if curl -sSf https://www.saucedemo.com/ > /dev/null; then
-          echo "SauceDemo is available."
-          exit 0
-        else
-          echo "SauceDemo not available yet. Retrying in 10 seconds..."
-          sleep 10
-        fi
-      done
-      echo "SauceDemo is not available after multiple attempts."
-      exit 1
+    - name: Run Playwright tests
+      run: npx playwright test --reporter=dot
 
-  - name: Run Playwright test ${{ matrix.spec }}
-    run: npx playwright test ${{ matrix.spec }} --reporter=list,junit
+    - name: Upload Playwright report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: playwright-report-${{ github.run_number }}
+        path: playwright-report/
+        retention-days: 30
 
-  - name: Upload Playwright HTML report
-    if: always()
-    uses: actions/upload-artifact@v4
-    with:
-      name: playwright-report-${{ matrix.spec }}-${{ github.run_number }}
-      path: playwright-report/
-      retention-days: 30
-
-  - name: Upload test results (JUnit)
-    if: always()
-    uses: actions/upload-artifact@v4
-    with:
-      name: test-results-${{ matrix.spec }}-${{ github.run_number }}
-      path: test-results/
-      retention-days: 30
-```
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-${{ github.run_number }}
+        path: test-results/
+        retention-days: 30
