@@ -1,12 +1,14 @@
 import { expect, Page } from '@playwright/test';
 import { BasePage } from './base.page';
-import { dataTestId } from '../utils/test-ids';
+import { hasId } from '../utils/test-ids';
 
 export class InventoryPage extends BasePage {
   // Locators
   private pageTitle = this.locator('.title');
   private cartBadge = this.locator('.shopping_cart_badge');
   private cartLink = this.locator('.shopping_cart_link');
+  private menuButton = this.locator(hasId('react-burger-menu-btn'));
+  private logoutButton = this.locator(hasId('logout_sidebar_link'));
 
   constructor(page: Page) {
     super(page);
@@ -36,8 +38,11 @@ export class InventoryPage extends BasePage {
 
 
   async logout() {
-    await this.click('[id="react-burger-menu-btn"]');
-    await this.click('[id="logout_sidebar_link"]');
+
+    // Logout Button
+    await this.menuButton.click();
+    await this.logoutButton.click();
+
     await expect(this.page).toHaveURL('https://www.saucedemo.com/');
   }
 }
