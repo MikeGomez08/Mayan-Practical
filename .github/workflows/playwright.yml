@@ -14,10 +14,8 @@ jobs:
     strategy:
       matrix:
         spec: [ 
-          src/tests/addToCartCheckout.spec.ts, 
-          src/tests/logout.spec.ts
+          src/tests/addToCartCheckout.spec.ts
         ]
-
     steps:
     - uses: actions/checkout@v4
 
@@ -55,13 +53,13 @@ jobs:
         exit 1
 
     - name: Run Playwright tests
-      run: npx playwright test ${{ matrix.spec }} --reporter=dot
+      run: npx playwright test --reporter=dot
 
     - name: Upload Playwright report
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: playwright-report-${{ matrix.spec }}-${{ github.run_number }}
+        name: playwright-report-${{ github.run_number }}
         path: playwright-report/
         retention-days: 30
 
@@ -69,7 +67,6 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: test-results-${{ matrix.spec }}-${{ github.run_number }}
+        name: test-results-${{ github.run_number }}
         path: test-results/
         retention-days: 30
-
