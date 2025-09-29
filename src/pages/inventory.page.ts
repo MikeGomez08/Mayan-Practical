@@ -36,7 +36,7 @@ export class InventoryPage extends BasePage {
 
   async logout() {
     await this.click('[id="react-burger-menu-btn"]');
-    await this.click('[id=:"logout_sidebar_link"]');
+    await this.click('[id="logout_sidebar_link"]');
     await expect(this.page).toHaveURL('https://www.saucedemo.com/');
   }
 }

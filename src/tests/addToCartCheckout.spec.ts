@@ -86,4 +86,15 @@ test.describe('SauceDemo - Add to Cart and Checkout (Grouped)', () => {
       await checkoutPage.expectOrderComplete();
     });
   });
+
+
+  // Logout test
+  test.describe('Logout', () => {
+    test('User can logout successfully', async ({ page }) => {
+      await loginPage.open();
+      await loginPage.login(standardUser.username, standardUser.password);
+      await inventoryPage.expectLoaded();
+      await inventoryPage.logout();
+    });
+  });
 });

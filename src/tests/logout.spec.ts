@@ -3,7 +3,6 @@ import {test, expect} from '@playwright/test';
 
 test('Logout Functionality', async ({page}) => {
    
-
     //Login Page
     await page.goto('https://www.saucedemo.com/');
     await page.fill('[data-test="username"]', 'standard_user');
